@@ -1,9 +1,12 @@
-class circle:
+class circle_class:
+
     def __init__(self, radius):
         self.radius = radius
     
-    def area(radius):
-        return np.pi * (self.radius ** 2)
+    def area(self):
+        area = round(3.1416 * (self.radius ** 2), 4)
+        return str(area)
     
     def perimeter(self):
-        return np.pi * 2 * self.radius
+        perimeter = round(3.1416 * 2 * self.radius, 4)
+        return str(perimeter)

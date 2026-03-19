@@ -2,6 +2,8 @@ from flask import Flask, render_template, request
 
 from helper import perform_calculation, convert_to_float
 
+from circle import circle_class
+
 app = Flask(__name__)  # create the instance of the flask class
 
 
@@ -19,11 +21,6 @@ def calculate():
         value2 = request.form['value2']
         operation = str(request.form['operation'])
 
-        # make sure the input is one of the allowed inputs (not absolutely necessary in the drop-down case)
-        if operation not in ['add', 'subtract', 'divide', 'multiply']:
-            return render_template('calculator.html',
-                                   printed_result='Operation must be one of "add", "subtract", "divide", or "multiply".')
-
         try:
             value1 = convert_to_float(value=value1)
             value2 = convert_to_float(value=value2)
@@ -38,3 +35,32 @@ def calculate():
             return render_template('calculator.html', printed_result="You cannot divide by zero")
 
     return render_template('calculator.html')
+
+@app.route('/circle', methods=['GET', 'POST'])
+def circle():
+    if request.method == 'POST':
+
+        input = request.form['radius']
+        operation = str(request.form['operation'])
+        
+        try:
+            radius = convert_to_float(value = input)
+        except ValueError:
+            return render_template('circle.html', printed_result="Cannot perform operation with this input.")
+        
+        if radius <= 0 :
+            return render_template('circle.html',
+                                   printed_result='Radius must be greater than zero.')
+        else:
+            final_circle = circle_class(radius)
+        
+        if operation == 'area':
+            result = final_circle.area()
+            return render_template('circle.html', printed_result=str(result))
+        else:
+            result = final_circle.perimeter()
+            return render_template('circle.html', printed_result=str(result))
+        
+    return render_template('circle.html')
+        
+        
